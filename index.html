@@ -1,335 +1,251 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgroShift Nexus | Team Nokkhotro</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            dark: '#0f172a',
-                            light: '#1e293b',
-                            accent: '#10b981', // Emerald green
-                            blue: '#3b82f6',
-                        }
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    }
-                }
-            }
-        }
-    </script>
+    <title>AgroShift Nexus | Farmer's AI Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
-        .hero-bg {
-            background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.95)), url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
+        :root {
+            --ink: #172033;
+            --muted: #687386;
+            --line: #e1e5e9;
+            --surface: #ffffff;
+            --canvas: #f4f5f6;
+            --green: #16a34a;
+            --green-dark: #087e35;
+            --red: #e3272e;
+            --orange: #ff7b20;
+            --blue: #4285f4;
+            --shadow: 0 7px 16px rgba(30, 41, 59, .09);
         }
-        .agent-card:hover .agent-icon {
-            transform: scale(1.1) rotate(5deg);
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { margin: 0; background: var(--canvas); color: var(--ink); font-family: "DM Sans", sans-serif; -webkit-font-smoothing: antialiased; }
+        button, select { font: inherit; }
+        button { cursor: pointer; }
+        .shell { width: min(1204px, calc(100% - 36px)); margin: 0 auto; }
+        .topbar { height: 64px; margin-top: 14px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,.82); border: 1px solid #edf0f2; border-radius: 34px; box-shadow: var(--shadow); }
+        .brand { display: flex; align-items: center; gap: 9px; font-weight: 800; font-size: 19px; color: #245534; }
+        .brand-mark { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 50%; background: #1faf52; color: white; box-shadow: 0 4px 8px #16a34a35; }
+        .brand-mark i { font-size: 18px; transform: rotate(-8deg); }
+        nav { display: flex; gap: 31px; margin-left: 100px; }
+        nav a { color: #536071; font-size: 14px; font-weight: 600; text-decoration: none; }
+        nav a:hover { color: var(--green); }
+        .top-actions { display: flex; align-items: center; gap: 16px; }
+        .language { border: 1px solid #dbe0e5; border-radius: 18px; background: #fafbfc; color: #465164; padding: 5px 12px; font-size: 12px; font-weight: 700; }
+        .dashboard-btn, .accept-btn { border: 0; color: white; background: var(--green); border-radius: 22px; padding: 10px 18px; font-weight: 700; box-shadow: 0 4px 8px #16a34a30; }
+        .dashboard-btn:hover, .accept-btn:hover { background: var(--green-dark); }
+        .heading { display: flex; justify-content: space-between; align-items: end; padding: 14px 0 30px; }
+        h1, h2, h3, p { margin: 0; }
+        h1, h2, h3 { font-family: Manrope, sans-serif; }
+        h1 { font-size: 30px; letter-spacing: -.7px; }
+        .heading p { color: var(--muted); margin-top: 2px; font-size: 16px; }
+        .location { display: flex; align-items: center; gap: 10px; background: white; border: 1px solid var(--line); border-radius: 7px; padding: 9px 12px; color: #566172; font-weight: 700; box-shadow: 0 2px 4px #33415510; }
+        .location i { color: #f05252; }
+        .location select { border: 0; outline: 0; color: inherit; font-weight: 700; background: transparent; }
+        .dashboard-grid { display: grid; grid-template-columns: 378px 1fr; gap: 23px; }
+        .left-column, .right-column { display: flex; flex-direction: column; gap: 23px; }
+        .panel { background: var(--surface); border: 1px solid #e5e7ea; border-radius: 15px; box-shadow: 0 2px 3px #3341550c; }
+        .alert { min-height: 204px; padding: 23px; background: #fff2f2; border-color: #ffd9d9; }
+        .eyebrow { display: flex; align-items: center; gap: 11px; color: var(--green); font-weight: 800; font-size: 12px; letter-spacing: .8px; }
+        .eyebrow .dot { width: 12px; height: 12px; border-radius: 50%; background: currentColor; }
+        .alert .eyebrow { color: #c63737; }
+        .alert h2 { font-size: 20px; margin: 18px 0 8px; }
+        .alert p { color: #dd3838; font-size: 14px; line-height: 1.4; max-width: 300px; }
+        .alert-action { width: 100%; border: 0; border-radius: 7px; padding: 9px; margin-top: 16px; color: white; background: var(--red); font-weight: 800; }
+        .alert-action:hover { background: #c71925; }
+        .climate { padding: 22px; min-height: 286px; }
+        .panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .panel-heading h3 { font-size: 16px; }
+        .panel-heading i { color: var(--blue); margin-right: 8px; }
+        .badge { background: #e1edff; color: #3269c9; border-radius: 4px; padding: 5px 8px; font-size: 11px; font-weight: 800; }
+        .temperature { display: flex; align-items: center; gap: 14px; margin: 21px 0 22px; }
+        .temperature i { color: #ff963e; font-size: 43px; }
+        .temperature strong { display: block; font-family: Manrope; font-size: 36px; line-height: 1; }
+        .temperature span { color: var(--muted); font-size: 14px; }
+        .forecast { border-top: 1px solid var(--line); padding-top: 13px; display: grid; gap: 13px; }
+        .forecast-row { display: flex; justify-content: space-between; color: var(--muted); font-size: 14px; }
+        .forecast-row span:last-child { color: #4c5668; }
+        .forecast-row i { color: #f3bd00; margin-right: 8px; }
+        .forecast-row:nth-child(2) i { color: #5e9eff; }
+        .forecast-row:nth-child(3) i { color: #3983ee; }
+        .recommendation { min-height: 244px; padding: 24px 25px; border-left: 4px solid var(--green); box-shadow: 0 6px 10px #33415521; }
+        .recommendation h2 { font-size: 24px; margin: 8px 0 15px; }
+        .recommendation p { color: var(--muted); font-size: 17px; line-height: 1.7; }
+        .recommendation p strong { color: var(--ink); }
+        .days { display: inline-block; background: #fff0a0; color: #806a00; border-radius: 4px; padding: 2px 7px; font-weight: 800; white-space: nowrap; }
+        .actions { display: flex; gap: 12px; margin-top: 21px; }
+        .accept-btn { border-radius: 7px; padding: 11px 18px; }
+        .alternative-btn { border: 1px solid #d5dbe2; border-radius: 7px; padding: 10px 18px; color: #596576; background: #f6f7f8; font-weight: 700; }
+        .alternative-btn:hover { background: #e9edf0; }
+        .soil { min-height: 291px; padding: 23px; }
+        .soil .badge { background: #f1e4ff; color: #8f44df; }
+        .soil-content { display: grid; grid-template-columns: 1fr 1.04fr; align-items: center; gap: 30px; margin-top: 23px; }
+        .map { position: relative; overflow: hidden; min-height: 194px; border-radius: 10px; background: linear-gradient(135deg, #dac59a, #efd9a7 38%, #dbab8d 67%, #d3bb94); }
+        .map::before { content: ""; position: absolute; inset: 0; opacity: .35; background: repeating-linear-gradient(35deg, transparent 0 17px, #af956d 18px 20px, transparent 21px 34px); mix-blend-mode: multiply; }
+        .map::after { content: ""; position: absolute; width: 130px; height: 120px; left: 39%; top: 10%; border-radius: 48% 52% 62% 38%; background: #b29b79; opacity: .28; transform: rotate(-27deg); }
+        .scan-btn { position: absolute; z-index: 1; left: 50%; top: 50%; transform: translate(-50%, -50%); white-space: nowrap; border: 0; border-radius: 9px; padding: 8px 12px; background: white; color: #4b5563; font-size: 12px; font-weight: 800; box-shadow: 0 3px 9px #5b46322d; }
+        .metrics { display: grid; gap: 20px; }
+        .metric-head { display: flex; justify-content: space-between; color: #5c6677; font-size: 14px; margin-bottom: 6px; }
+        .metric-head strong { color: #ef3034; }
+        .metric:nth-child(2) .metric-head strong { color: #ff711c; }
+        .bar { height: 10px; border-radius: 8px; background: #e4e6e9; overflow: hidden; }
+        .bar span { display: block; height: 100%; border-radius: inherit; background: #ef3034; width: 18%; }
+        .metric:nth-child(2) .bar span { background: #ff711c; width: 32%; }
+        .stress { background: linear-gradient(90deg, #2ac45e 0 34%, #efbd00 34% 67%, #ec898f 67%); }
+        .toast { position: fixed; right: 22px; bottom: 22px; z-index: 5; display: none; max-width: 310px; padding: 14px 17px; color: #fff; background: #1c2939; border-radius: 9px; box-shadow: 0 10px 24px #17203345; font-size: 14px; }
+        .toast.show { display: block; animation: rise .2s ease-out; }
+        @keyframes rise { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .view { display: none; }
+        .view.active { display: block; animation: view-in .35s ease-out; }
+        @keyframes view-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .theme-toggle { width: 35px; height: 35px; border: 1px solid #dbe0e5; border-radius: 50%; background: #fafbfc; color: #536071; }
+        .theme-toggle:hover { color: var(--green); border-color: var(--green); }
+        .landing { padding: 62px 0 44px; }
+        .landing-hero { display: grid; grid-template-columns: 1.02fr .98fr; align-items: center; gap: 56px; min-height: 440px; }
+        .landing-copy .eyebrow { margin-bottom: 19px; }
+        .landing-copy h1 { max-width: 650px; font-size: clamp(42px, 6vw, 72px); line-height: 1.02; letter-spacing: -2.4px; }
+        .landing-copy h1 span { color: var(--green); }
+        .landing-copy > p { max-width: 560px; color: var(--muted); font-size: 18px; line-height: 1.65; margin: 22px 0 28px; }
+        .landing-actions { display: flex; gap: 12px; align-items: center; }
+        .primary-cta { border: 0; border-radius: 8px; padding: 13px 20px; color: white; background: var(--green); font-weight: 800; box-shadow: 0 8px 16px #16a34a2c; }
+        .primary-cta:hover { background: var(--green-dark); }
+        .secondary-cta { border: 1px solid var(--line); border-radius: 8px; padding: 12px 18px; color: var(--ink); background: var(--surface); font-weight: 700; }
+        .secondary-cta:hover { border-color: var(--green); color: var(--green); }
+        .landing-visual { position: relative; min-height: 380px; padding: 24px; overflow: hidden; border: 1px solid #dfe8e0; border-radius: 24px; background: linear-gradient(140deg, #e5f3e8, #f7f4e7 56%, #e5eff8); box-shadow: var(--shadow); }
+        .landing-visual::before { content: ""; position: absolute; width: 230px; height: 230px; right: -65px; top: -75px; border-radius: 50%; background: #acd8b277; }
+        .field-lines { position: absolute; inset: 0; opacity: .4; background: repeating-linear-gradient(166deg, transparent 0 25px, #8fbf9c 26px 28px, transparent 29px 52px); transform: rotate(-8deg) scale(1.2); }
+        .signal-card { position: absolute; left: 24px; top: 24px; width: 205px; padding: 16px; border: 1px solid #ffffffaa; border-radius: 13px; background: #ffffffdf; box-shadow: 0 8px 22px #48614b22; }
+        .signal-card strong { display: block; margin: 7px 0 4px; font-family: Manrope; font-size: 24px; }
+        .signal-card span { color: var(--muted); font-size: 12px; }
+        .signal-icon { color: var(--green); font-size: 20px; }
+        .orbit { position: absolute; right: 54px; top: 76px; width: 164px; height: 164px; display: grid; place-items: center; border: 1px solid #ffffffb8; border-radius: 50%; background: #ffffff55; }
+        .orbit::before { content: ""; position: absolute; width: 115px; height: 115px; border: 1px dashed #6ca47a; border-radius: 50%; }
+        .orbit i { z-index: 1; color: #2d8a4d; font-size: 53px; }
+        .insight-card { position: absolute; right: 24px; bottom: 25px; width: 236px; padding: 16px; border-left: 4px solid var(--green); border-radius: 9px; background: var(--surface); box-shadow: 0 8px 20px #48614b22; }
+        .insight-card small { color: var(--green); font-weight: 800; letter-spacing: .7px; }
+        .insight-card p { margin-top: 7px; color: var(--ink); font-weight: 700; line-height: 1.4; }
+        .landing-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 32px; }
+        .stat { padding: 20px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+        .stat strong { display: block; font-family: Manrope; font-size: 26px; }
+        .stat span { display: block; color: var(--muted); font-size: 13px; margin-top: 5px; }
+        body.dark { --ink: #edf5ef; --muted: #9ca9a1; --line: #35433b; --surface: #1d2822; --canvas: #111914; --shadow: 0 8px 20px rgba(0,0,0,.22); }
+        body.dark .topbar { background: rgba(29,40,34,.9); border-color: #35433b; }
+        body.dark .brand { color: #b8e6c4; }
+        body.dark nav a, body.dark .language, body.dark .theme-toggle, body.dark .location { color: #bdc9c0; }
+        body.dark .language, body.dark .theme-toggle, body.dark .location, body.dark .secondary-cta, body.dark .alternative-btn { background: #202d26; border-color: #405046; }
+        body.dark .location select { color: #d5e0d8; }
+        body.dark .alert { background: #3a2022; border-color: #623336; }
+        body.dark .alert h2 { color: #fff1f1; }
+        body.dark .badge { background: #253d5c; color: #9ec5ff; }
+        body.dark .soil .badge { background: #3a2850; color: #d4a9ff; }
+        body.dark .map { background: linear-gradient(135deg, #665c43, #88764f 38%, #704f4d 67%, #5c5144); }
+        body.dark .scan-btn { background: #edf5ef; color: #243329; }
+        body.dark .landing-visual { background: linear-gradient(140deg, #1c3925, #3b3825 56%, #1d3240); border-color: #3a5943; }
+        body.dark .signal-card, body.dark .insight-card { background: #1d2822ee; border-color: #405046; }
+        body.dark .insight-card p { color: var(--ink); }
+        @media (max-width: 850px) {
+            .topbar { height: auto; min-height: 64px; flex-wrap: wrap; gap: 12px; padding: 12px 18px; border-radius: 20px; }
+            nav { order: 3; width: 100%; justify-content: space-between; margin: 0; padding-top: 4px; }
+            .heading { align-items: flex-start; flex-direction: column; gap: 18px; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .landing-hero { grid-template-columns: 1fr; gap: 28px; }
+            .landing { padding-top: 38px; }
         }
-        .agent-icon {
-            transition: all 0.3s ease;
+        @media (max-width: 560px) {
+            .shell { width: min(100% - 24px, 1204px); }
+            .top-actions { gap: 7px; }
+            .dashboard-btn { padding: 9px 12px; }
+            nav { gap: 10px; overflow-x: auto; }
+            nav a { font-size: 12px; white-space: nowrap; }
+            h1 { font-size: 26px; }
+            .soil-content { grid-template-columns: 1fr; gap: 20px; }
+            .map { min-height: 160px; }
+            .recommendation p { font-size: 15px; }
+            .landing-stats { grid-template-columns: 1fr; }
+            .landing-copy h1 { letter-spacing: -1.3px; }
+            .landing-visual { min-height: 330px; }
+            .orbit { right: 26px; top: 85px; }
         }
     </style>
 </head>
-<body class="bg-brand-dark text-slate-300 font-sans antialiased">
-
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 bg-brand-dark/90 backdrop-blur-md border-b border-slate-700">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-earth-americas text-brand-accent text-2xl"></i>
-                    <span class="font-bold text-xl text-white tracking-wide">AgroShift <span class="text-brand-accent">Nexus</span></span>
+<body>
+    <div class="shell">
+        <header class="topbar">
+            <a class="brand" href="#landing" aria-label="AgroShift Nexus home"><span class="brand-mark"><i class="fa-solid fa-leaf"></i></span> AgroShift Nexus</a>
+            <nav aria-label="Primary navigation"><a href="#landing">The Vision</a><a href="#soil">NASA AI</a><a href="#team">Team</a></nav>
+            <div class="top-actions"><button class="theme-toggle" type="button" id="themeToggle" aria-label="Switch to dark theme"><i class="fa-solid fa-moon"></i></button><button class="language" type="button" aria-label="Change language">EN / বাংলা</button><button class="dashboard-btn" type="button" id="openDashboard"><i class="fa-solid fa-chart-line"></i> Open Dashboard</button></div>
+        </header>
+        <main class="view active landing" id="landing">
+            <section class="landing-hero">
+                <div class="landing-copy">
+                    <div class="eyebrow"><i class="fa-solid fa-satellite"></i> NASA EARTH DATA FOR EVERY FIELD</div>
+                    <h1>Grow with a clearer view of <span>what comes next.</span></h1>
+                    <p>AgroShift Nexus turns satellite intelligence, local weather, and soil signals into calm, practical decisions for climate-resilient farming.</p>
+                    <div class="landing-actions"><button class="primary-cta" type="button" id="launchDashboard"><i class="fa-solid fa-chart-line"></i> Open Farmer Dashboard</button><a class="secondary-cta" href="#landing">See the vision</a></div>
                 </div>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-8">
-                        <a href="#about" class="hover:text-brand-accent px-3 py-2 rounded-md text-sm font-medium transition-colors">About</a>
-                        <a href="#agents" class="hover:text-brand-accent px-3 py-2 rounded-md text-sm font-medium transition-colors">AI Agents</a>
-                        <a href="#data" class="hover:text-brand-accent px-3 py-2 rounded-md text-sm font-medium transition-colors">NASA Data</a>
-                        <a href="#team" class="hover:text-brand-accent px-3 py-2 rounded-md text-sm font-medium transition-colors">Team</a>
-                    </div>
+                <div class="landing-visual" aria-label="Illustration of satellite-powered farm intelligence">
+                    <div class="field-lines"></div>
+                    <div class="signal-card"><i class="signal-icon fa-solid fa-satellite-dish"></i><strong>Live field signals</strong><span>SMAP · GPM · MODIS</span></div>
+                    <div class="orbit"><i class="fa-solid fa-seedling"></i></div>
+                    <div class="insight-card"><small>ADAPTIVE INSIGHT</small><p>Plant cover crops within the next 12 days.</p></div>
                 </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero-bg relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden min-h-screen flex items-center">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center max-w-4xl mx-auto">
-                <div class="inline-block mb-4 px-4 py-1 rounded-full bg-slate-800/80 border border-brand-accent/30 text-brand-accent text-sm font-semibold tracking-wider">
-                    NASA Space Apps Challenge 2026
+            </section>
+            <section class="landing-stats" aria-label="Platform capabilities">
+                <div class="stat"><strong>48 hr</strong><span>Early warning window for weather risk</span></div>
+                <div class="stat"><strong>1m</strong><span>Root-zone moisture visibility</span></div>
+                <div class="stat"><strong>6 AI agents</strong><span>Collaborating on every recommendation</span></div>
+            </section>
+        </main>
+        <main class="view dashboard-view" id="dashboardView">
+            <section class="heading" id="vision"><div><h1>Farmer's AI Assistant</h1><p>Turning predictive intelligence into proactive adaptation.</p></div><label class="location"><i class="fa-solid fa-location-dot"></i><select id="locationSelect" aria-label="Farm location"><option>Barind Tract, Rajshahi</option><option>Rangpur, Bangladesh</option><option>Khulna, Bangladesh</option></select><i class="fa-solid fa-chevron-down"></i></label></section>
+            <div class="dashboard-grid">
+                <div class="left-column">
+                    <section class="panel alert" aria-labelledby="alertTitle"><div class="eyebrow"><span class="dot"></span> CRITICAL ALERT</div><h2 id="alertTitle">Flash Flood Warning</h2><p>NASA GPM data predicts heavy unseasonal downpour in 48 hours.</p><button class="alert-action" id="alertAction" type="button">View Evacuation/Protection Steps</button></section>
+                    <section class="panel climate" aria-labelledby="climateTitle"><div class="panel-heading"><h3 id="climateTitle"><i class="fa-solid fa-sun"></i> Local Climate</h3><span class="badge">NASA MODIS</span></div><div class="temperature"><i class="fa-solid fa-temperature-three-quarters"></i><div><strong>38°C</strong><span>High Heat Index</span></div></div><div class="forecast"><div class="forecast-row"><span>Tomorrow</span><span><i class="fa-solid fa-sun"></i>39°C</span></div><div class="forecast-row"><span>Friday</span><span><i class="fa-solid fa-cloud-rain"></i>28°C</span></div><div class="forecast-row"><span>Saturday</span><span><i class="fa-solid fa-cloud-showers-heavy"></i>26°C</span></div></div></section>
                 </div>
-                <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
-                    Smarter Crop Rotations for a <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-brand-blue">Changing Climate</span>
-                </h1>
-                <p class="text-lg md:text-xl text-slate-300 mb-10 leading-relaxed">
-                    A web-based, multi-agent decision-support platform connecting NASA Earth observation data with farm-level realities. Empowering farmers to protect soil health, conserve water, and improve economic returns.
-                </p>
-                <div class="flex flex-col sm:flex-row justify-center gap-4">
-                    <button onclick="document.getElementById('demo').scrollIntoView()" class="bg-brand-accent hover:bg-emerald-500 text-white font-bold py-3 px-8 rounded-lg transition-colors shadow-lg shadow-brand-accent/20 flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-desktop"></i> Launch Platform Demo
-                    </button>
-                    <a href="#about" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 px-8 rounded-lg transition-colors border border-slate-600 flex items-center justify-center gap-2">
-                        Learn More <i class="fa-solid fa-arrow-down"></i>
-                    </a>
+                <div class="right-column">
+                    <section class="panel recommendation" aria-labelledby="recommendationTitle"><div class="eyebrow"><i class="fa-solid fa-robot"></i> ADAPTIVE ROTATION AGENT</div><h2 id="recommendationTitle">Optimal Action Required</h2><p><strong>Recommendation:</strong> Plant legume cover crops (e.g., Mung bean) within the next <span class="days">12 days</span> to retain moisture ahead of projected dry spells and restore soil nitrogen.</p><div class="actions"><button class="accept-btn" type="button" id="acceptPlan"><i class="fa-solid fa-check"></i> Accept Plan</button><button class="alternative-btn" type="button" id="viewAlternatives">View Alternatives</button></div></section>
+                    <section class="panel soil" id="soil" aria-labelledby="soilTitle"><div class="panel-heading"><h3 id="soilTitle"><i class="fa-solid fa-layer-group" style="color:#263445"></i> Root-Zone Soil Moisture</h3><span class="badge">NASA SMAP Data</span></div><div class="soil-content"><div class="map" role="img" aria-label="Stylized live satellite scan of the farm region"><button class="scan-btn" type="button" id="scanButton">Live Satellite Scan</button></div><div class="metrics"><div class="metric"><div class="metric-head"><span>Topsoil Moisture</span><strong>18% (Critical)</strong></div><div class="bar"><span></span></div></div><div class="metric"><div class="metric-head"><span>Root-Zone Moisture (1m)</span><strong>32% (Low)</strong></div><div class="bar"><span></span></div></div><div class="metric"><div class="metric-head"><span>Evapotranspiration Stress</span><strong style="color:#273142">High</strong></div><div class="bar stress"></div></div></div></div></section>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Category & Problem Statement -->
-    <section id="about" class="py-20 bg-brand-light">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-brand-accent font-semibold tracking-wide uppercase text-sm mb-2">The Challenge</h2>
-                <h3 class="text-3xl md:text-4xl font-bold text-white mb-4">Field Shift: Adapting Farms with NASA Data</h3>
-                <div class="w-24 h-1 bg-brand-accent mx-auto rounded-full mb-8"></div>
-                <p class="max-w-3xl mx-auto text-lg text-slate-300">
-                    Climate change makes traditional farming unpredictable. By combining NASA data with collaborative multi-agent reasoning, AgroShift Nexus transforms complex Earth observation and agricultural information into practical farm-level guidance, helping farmers reduce crop loss and strengthen climate-resilient agriculture.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Multi-Agent System Section -->
-    <section id="agents" class="py-20 bg-brand-dark relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Collaborative Multi-Agent Architecture</h2>
-                <p class="text-slate-400 max-w-2xl mx-auto">Our platform deploys a team of specialized AI agents to analyze farm conditions and recommend optimal crop sequences.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Agent 1 -->
-                <div class="agent-card bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-brand-blue/50 transition-colors shadow-lg">
-                    <div class="w-14 h-14 rounded-full bg-blue-500/20 flex items-center justify-center mb-6 agent-icon">
-                        <i class="fa-solid fa-satellite text-2xl text-brand-blue"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-white mb-3">NASA Earth Observation Agent</h4>
-                    <p class="text-sm text-slate-400 leading-relaxed">Analyzes satellite-derived environmental conditions, processing large-scale geospatial data to understand regional climate contexts.</p>
-                </div>
-
-                <!-- Agent 2 -->
-                <div class="agent-card bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-amber-500/50 transition-colors shadow-lg">
-                    <div class="w-14 h-14 rounded-full bg-amber-500/20 flex items-center justify-center mb-6 agent-icon">
-                        <i class="fa-solid fa-seedling text-2xl text-amber-500"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-white mb-3">Soil & Farm Agent</h4>
-                    <p class="text-sm text-slate-400 leading-relaxed">Assesses local soil characteristics, moisture levels, and farm topography to determine fundamental land capabilities.</p>
-                </div>
-
-                <!-- Agent 3 -->
-                <div class="agent-card bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-red-500/50 transition-colors shadow-lg">
-                    <div class="w-14 h-14 rounded-full bg-red-500/20 flex items-center justify-center mb-6 agent-icon">
-                        <i class="fa-solid fa-cloud-bolt text-2xl text-red-400"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-white mb-3">Climate Risk Agent</h4>
-                    <p class="text-sm text-slate-400 leading-relaxed">Identifies volatile climate patterns, predicting potential risks like unseasonal droughts or flash floods based on historical trends.</p>
-                </div>
-
-                <!-- Agent 4 -->
-                <div class="agent-card bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-brand-accent/50 transition-colors shadow-lg">
-                    <div class="w-14 h-14 rounded-full bg-brand-accent/20 flex items-center justify-center mb-6 agent-icon">
-                        <i class="fa-solid fa-leaf text-2xl text-brand-accent"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-white mb-3">Crop Intelligence Agent</h4>
-                    <p class="text-sm text-slate-400 leading-relaxed">Evaluates crop suitability and rotation compatibility, ensuring successive crops restore nutrients rather than deplete them.</p>
-                </div>
-
-                <!-- Agent 5 -->
-                <div class="agent-card bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-purple-500/50 transition-colors shadow-lg">
-                    <div class="w-14 h-14 rounded-full bg-purple-500/20 flex items-center justify-center mb-6 agent-icon">
-                        <i class="fa-solid fa-coins text-2xl text-purple-400"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-white mb-3">Economic Preference Agent</h4>
-                    <p class="text-sm text-slate-400 leading-relaxed">Considers market profitability, seed costs, and specific farmer priorities to ensure strategies are financially viable.</p>
-                </div>
-
-                <!-- Agent 6 -->
-                <div class="agent-card bg-gradient-to-br from-slate-800 to-slate-700 p-8 rounded-2xl border border-slate-600 shadow-lg relative overflow-hidden group">
-                    <div class="absolute inset-0 bg-brand-accent/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <div class="w-14 h-14 rounded-full bg-white/10 flex items-center justify-center mb-6 agent-icon relative z-10">
-                        <i class="fa-solid fa-network-wired text-2xl text-white"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-white mb-3 relative z-10">Orchestrator Agent</h4>
-                    <p class="text-sm text-slate-300 leading-relaxed relative z-10">Coordinates all other agents, combines findings, resolves conflicts, and generates the final, actionable crop-rotation strategy.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- NASA Data Integration -->
-    <section id="data" class="py-20 bg-brand-light border-y border-slate-700">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row items-center gap-12">
-                <div class="md:w-1/2">
-                    <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="NASA Satellite Data View" class="rounded-2xl shadow-2xl border border-slate-600">
-                </div>
-                <div class="md:w-1/2">
-                    <h2 class="text-3xl font-bold text-white mb-6">Powered by NASA Earthdata</h2>
-                    <p class="text-slate-300 mb-8 leading-relaxed">AgroShift Nexus relies on cutting-edge space technology to provide grassroots solutions. We integrate critical satellite observations to inform our multi-agent model:</p>
-                    
-                    <ul class="space-y-4">
-                        <li class="flex items-start gap-4 bg-slate-800 p-4 rounded-lg border border-slate-700">
-                            <i class="fa-solid fa-water text-brand-blue mt-1 text-xl"></i>
-                            <div>
-                                <strong class="text-white block">SMAP (Soil Moisture Active Passive)</strong>
-                                <span class="text-sm text-slate-400">Tracks root-zone soil moisture levels to guide irrigation and drought preparedness.</span>
-                            </div>
-                        </li>
-                        <li class="flex items-start gap-4 bg-slate-800 p-4 rounded-lg border border-slate-700">
-                            <i class="fa-solid fa-cloud-showers-heavy text-brand-accent mt-1 text-xl"></i>
-                            <div>
-                                <strong class="text-white block">GPM/IMERG</strong>
-                                <span class="text-sm text-slate-400">Provides high-resolution precipitation mapping to forecast rainfall and flood risks.</span>
-                            </div>
-                        </li>
-                        <li class="flex items-start gap-4 bg-slate-800 p-4 rounded-lg border border-slate-700">
-                            <i class="fa-solid fa-satellite-dish text-amber-500 mt-1 text-xl"></i>
-                            <div>
-                                <strong class="text-white block">MODIS/VIIRS NDVI</strong>
-                                <span class="text-sm text-slate-400">Monitors Normalized Difference Vegetation Index to track ongoing crop health and land degradation.</span>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Interactive Demo Section -->
-    <section id="demo" class="py-20 bg-brand-dark">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl font-bold text-white mb-4">Platform Interface Demo</h2>
-                <p class="text-slate-400">See how the agents collaborate in real-time to generate a strategy.</p>
-            </div>
-            
-            <div class="bg-slate-800 rounded-xl border border-slate-600 shadow-2xl overflow-hidden">
-                <!-- App Header -->
-                <div class="bg-slate-900 p-4 border-b border-slate-700 flex justify-between items-center">
-                    <div class="text-white font-semibold flex items-center gap-2">
-                        <i class="fa-solid fa-mobile-screen text-brand-accent"></i> Farmer Dashboard
-                    </div>
-                    <div class="flex gap-2">
-                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                        <div class="w-3 h-3 rounded-full bg-amber-500"></div>
-                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                    </div>
-                </div>
-                
-                <!-- App Body -->
-                <div class="p-6">
-                    <div class="flex flex-col sm:flex-row gap-4 mb-6">
-                        <label for="locationInput" class="sr-only">Farm location</label>
-                        <input type="text" id="locationInput" value="Rangpur, Bangladesh" class="flex-1 bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-accent" autocomplete="address-level2">
-                        <button id="analyzeBtn" type="button" class="bg-brand-accent hover:bg-emerald-500 text-white font-bold py-3 px-6 rounded-lg transition-colors">
-                            Run Analysis
-                        </button>
-                    </div>
-
-                    <!-- Terminal / Agent Output -->
-                    <div class="bg-black/50 rounded-lg p-4 h-64 overflow-y-auto font-mono text-sm border border-slate-700 relative">
-                        <div id="outputLog" class="space-y-2">
-                            <p class="text-slate-500">System ready. Waiting for input location...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Team Section -->
-    <section id="team" class="py-20 bg-brand-light">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-white mb-4">Team Nokkhotro</h2>
-                <div class="w-24 h-1 bg-brand-accent mx-auto rounded-full"></div>
-            </div>
-            
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 text-center">
-                <!-- Members based on form data -->
-                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
-                    <div class="w-16 h-16 bg-brand-blue/20 text-brand-blue rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">SI</div>
-                    <h4 class="text-white font-medium text-sm">S. H. M. Irfan</h4>
-                    <p class="text-brand-accent text-xs mt-1">Team Leader</p>
-                </div>
-                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
-                    <div class="w-16 h-16 bg-slate-700 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">AA</div>
-                    <h4 class="text-white font-medium text-sm">Arafat Mostofa Alif</h4>
-                    <p class="text-slate-400 text-xs mt-1">Member</p>
-                </div>
-                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 border-b-4 border-b-brand-accent">
-                    <div class="w-16 h-16 bg-brand-accent/20 text-brand-accent rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">NH</div>
-                    <h4 class="text-white font-medium text-sm">Nasor Hidar</h4>
-                    <p class="text-slate-400 text-xs mt-1">Member</p>
-                </div>
-                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
-                    <div class="w-16 h-16 bg-slate-700 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">SS</div>
-                    <h4 class="text-white font-medium text-sm">Suhita Srutee</h4>
-                    <p class="text-slate-400 text-xs mt-1">Member</p>
-                </div>
-                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
-                    <div class="w-16 h-16 bg-slate-700 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">MI</div>
-                    <h4 class="text-white font-medium text-sm">Md Monjurul Islam</h4>
-                    <p class="text-slate-400 text-xs mt-1">Member</p>
-                </div>
-                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
-                    <div class="w-16 h-16 bg-slate-700 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">SA</div>
-                    <h4 class="text-white font-medium text-sm">Saad Ahmed</h4>
-                    <p class="text-slate-400 text-xs mt-1">Member</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-slate-950 py-8 border-t border-slate-800 text-center">
-        <p class="text-slate-500 text-sm">
-            Created for NASA Space Apps Challenge 2026. Data and branding belong to their respective owners.
-        </p>
-    </footer>
-
-    <!-- Demo Script -->
+            <section id="team" style="height: 20px"></section>
+        </main>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <script>
-        const btn = document.getElementById('analyzeBtn');
-        const log = document.getElementById('outputLog');
-        const locationInput = document.getElementById('locationInput');
-
-        const simulationSteps = [
-            "<span class='text-blue-400'>[Earth Obs Agent]</span> Querying SMAP & GPM data for Rangpur...",
-            "<span class='text-blue-400'>[Earth Obs Agent]</span> Detected decreasing soil moisture trend (-12%) over 30 days.",
-            "<span class='text-amber-400'>[Soil & Farm Agent]</span> Local soil: Loamy clay. Current retention: Moderate.",
-            "<span class='text-red-400'>[Climate Risk Agent]</span> Warning: High probability of late-season dry spell.",
-            "<span class='text-emerald-400'>[Crop Intel Agent]</span> Evaluating: Paddy (High Risk), Maize (Low Risk), Legumes (Optimal).",
-            "<span class='text-purple-400'>[Economic Agent]</span> Legumes offer 18% higher profit margin with reduced irrigation costs.",
-            "<span class='text-white font-bold'>[Orchestrator]</span> Conflict resolved. Generating final recommendation...",
-            "<br><span class='text-brand-accent font-bold bg-brand-accent/20 px-2 py-1 rounded'>★ Final Strategy: Transition from Paddy to Legumes (Mung Bean) next cycle to restore soil nitrogen and evade drought window.</span>"
-        ];
-
-        btn.addEventListener('click', async () => {
-            const location = locationInput.value.trim() || 'your farm';
-            btn.disabled = true;
-            btn.classList.add('opacity-50', 'cursor-not-allowed');
-            log.innerHTML = "<p class='text-white'>Initializing multi-agent analysis...</p>";
-            
-            for(let i = 0; i < simulationSteps.length; i++) {
-                await new Promise(r => setTimeout(r, 800));
-                log.innerHTML += `<p class="mt-1">${simulationSteps[i].replaceAll('Rangpur, Bangladesh', location)}</p>`;
-                log.scrollTop = log.scrollHeight;
-            }
-
-            btn.disabled = false;
-            btn.classList.remove('opacity-50', 'cursor-not-allowed');
-            btn.innerText = "Run New Analysis";
-        });
+        const toast = document.getElementById('toast');
+        const landing = document.getElementById('landing');
+        const dashboard = document.getElementById('dashboardView');
+        const dashboardButton = document.getElementById('openDashboard');
+        const themeToggle = document.getElementById('themeToggle');
+        let toastTimer;
+        function showToast(message) { toast.textContent = message; toast.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove('show'), 3200); }
+        function setView(view) {
+            const showingDashboard = view === 'dashboard';
+            landing.classList.toggle('active', !showingDashboard);
+            dashboard.classList.toggle('active', showingDashboard);
+            dashboardButton.innerHTML = showingDashboard ? '<i class="fa-solid fa-arrow-left"></i> Back to Overview' : '<i class="fa-solid fa-chart-line"></i> Open Dashboard';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        dashboardButton.addEventListener('click', () => setView(dashboard.classList.contains('active') ? 'landing' : 'dashboard'));
+        document.getElementById('launchDashboard').addEventListener('click', () => setView('dashboard'));
+        document.querySelector('a[href="#soil"]').addEventListener('click', (event) => { event.preventDefault(); setView('dashboard'); setTimeout(() => document.getElementById('soil').scrollIntoView({ behavior: 'smooth' }), 80); });
+        document.querySelector('a[href="#team"]').addEventListener('click', (event) => { event.preventDefault(); setView('dashboard'); });
+        const savedTheme = localStorage.getItem('agroshift-theme');
+        if (savedTheme === 'dark') document.body.classList.add('dark');
+        function updateThemeButton() { const dark = document.body.classList.contains('dark'); themeToggle.innerHTML = dark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>'; themeToggle.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme'); }
+        updateThemeButton();
+        themeToggle.addEventListener('click', () => { document.body.classList.toggle('dark'); localStorage.setItem('agroshift-theme', document.body.classList.contains('dark') ? 'dark' : 'light'); updateThemeButton(); });
+        document.getElementById('acceptPlan').addEventListener('click', (event) => { event.currentTarget.innerHTML = '<i class="fa-solid fa-check-double"></i> Plan Accepted'; showToast('Rotation plan saved for Barind Tract, Rajshahi.'); });
+        document.getElementById('viewAlternatives').addEventListener('click', () => showToast('Alternative: drought-tolerant maize with reduced irrigation demand.'));
+        document.getElementById('alertAction').addEventListener('click', () => showToast('Protection steps: move equipment to high ground and clear drainage channels.'));
+        document.getElementById('scanButton').addEventListener('click', (event) => { event.currentTarget.textContent = 'Scanning...'; setTimeout(() => { event.currentTarget.textContent = 'Scan Updated'; showToast('Satellite scan refreshed just now.'); }, 900); });
+        document.getElementById('locationSelect').addEventListener('change', (event) => showToast(`Showing climate data for ${event.target.value}.`));
     </script>
 </body>
 </html>
