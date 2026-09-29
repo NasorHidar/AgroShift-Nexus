@@ -1,251 +1,125 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgroShift Nexus | Farmer's AI Assistant</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <style>
-        :root {
-            --ink: #172033;
-            --muted: #687386;
-            --line: #e1e5e9;
-            --surface: #ffffff;
-            --canvas: #f4f5f6;
-            --green: #16a34a;
-            --green-dark: #087e35;
-            --red: #e3272e;
-            --orange: #ff7b20;
-            --blue: #4285f4;
-            --shadow: 0 7px 16px rgba(30, 41, 59, .09);
-        }
-        * { box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body { margin: 0; background: var(--canvas); color: var(--ink); font-family: "DM Sans", sans-serif; -webkit-font-smoothing: antialiased; }
-        button, select { font: inherit; }
-        button { cursor: pointer; }
-        .shell { width: min(1204px, calc(100% - 36px)); margin: 0 auto; }
-        .topbar { height: 64px; margin-top: 14px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,.82); border: 1px solid #edf0f2; border-radius: 34px; box-shadow: var(--shadow); }
-        .brand { display: flex; align-items: center; gap: 9px; font-weight: 800; font-size: 19px; color: #245534; }
-        .brand-mark { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 50%; background: #1faf52; color: white; box-shadow: 0 4px 8px #16a34a35; }
-        .brand-mark i { font-size: 18px; transform: rotate(-8deg); }
-        nav { display: flex; gap: 31px; margin-left: 100px; }
-        nav a { color: #536071; font-size: 14px; font-weight: 600; text-decoration: none; }
-        nav a:hover { color: var(--green); }
-        .top-actions { display: flex; align-items: center; gap: 16px; }
-        .language { border: 1px solid #dbe0e5; border-radius: 18px; background: #fafbfc; color: #465164; padding: 5px 12px; font-size: 12px; font-weight: 700; }
-        .dashboard-btn, .accept-btn { border: 0; color: white; background: var(--green); border-radius: 22px; padding: 10px 18px; font-weight: 700; box-shadow: 0 4px 8px #16a34a30; }
-        .dashboard-btn:hover, .accept-btn:hover { background: var(--green-dark); }
-        .heading { display: flex; justify-content: space-between; align-items: end; padding: 14px 0 30px; }
-        h1, h2, h3, p { margin: 0; }
-        h1, h2, h3 { font-family: Manrope, sans-serif; }
-        h1 { font-size: 30px; letter-spacing: -.7px; }
-        .heading p { color: var(--muted); margin-top: 2px; font-size: 16px; }
-        .location { display: flex; align-items: center; gap: 10px; background: white; border: 1px solid var(--line); border-radius: 7px; padding: 9px 12px; color: #566172; font-weight: 700; box-shadow: 0 2px 4px #33415510; }
-        .location i { color: #f05252; }
-        .location select { border: 0; outline: 0; color: inherit; font-weight: 700; background: transparent; }
-        .dashboard-grid { display: grid; grid-template-columns: 378px 1fr; gap: 23px; }
-        .left-column, .right-column { display: flex; flex-direction: column; gap: 23px; }
-        .panel { background: var(--surface); border: 1px solid #e5e7ea; border-radius: 15px; box-shadow: 0 2px 3px #3341550c; }
-        .alert { min-height: 204px; padding: 23px; background: #fff2f2; border-color: #ffd9d9; }
-        .eyebrow { display: flex; align-items: center; gap: 11px; color: var(--green); font-weight: 800; font-size: 12px; letter-spacing: .8px; }
-        .eyebrow .dot { width: 12px; height: 12px; border-radius: 50%; background: currentColor; }
-        .alert .eyebrow { color: #c63737; }
-        .alert h2 { font-size: 20px; margin: 18px 0 8px; }
-        .alert p { color: #dd3838; font-size: 14px; line-height: 1.4; max-width: 300px; }
-        .alert-action { width: 100%; border: 0; border-radius: 7px; padding: 9px; margin-top: 16px; color: white; background: var(--red); font-weight: 800; }
-        .alert-action:hover { background: #c71925; }
-        .climate { padding: 22px; min-height: 286px; }
-        .panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-        .panel-heading h3 { font-size: 16px; }
-        .panel-heading i { color: var(--blue); margin-right: 8px; }
-        .badge { background: #e1edff; color: #3269c9; border-radius: 4px; padding: 5px 8px; font-size: 11px; font-weight: 800; }
-        .temperature { display: flex; align-items: center; gap: 14px; margin: 21px 0 22px; }
-        .temperature i { color: #ff963e; font-size: 43px; }
-        .temperature strong { display: block; font-family: Manrope; font-size: 36px; line-height: 1; }
-        .temperature span { color: var(--muted); font-size: 14px; }
-        .forecast { border-top: 1px solid var(--line); padding-top: 13px; display: grid; gap: 13px; }
-        .forecast-row { display: flex; justify-content: space-between; color: var(--muted); font-size: 14px; }
-        .forecast-row span:last-child { color: #4c5668; }
-        .forecast-row i { color: #f3bd00; margin-right: 8px; }
-        .forecast-row:nth-child(2) i { color: #5e9eff; }
-        .forecast-row:nth-child(3) i { color: #3983ee; }
-        .recommendation { min-height: 244px; padding: 24px 25px; border-left: 4px solid var(--green); box-shadow: 0 6px 10px #33415521; }
-        .recommendation h2 { font-size: 24px; margin: 8px 0 15px; }
-        .recommendation p { color: var(--muted); font-size: 17px; line-height: 1.7; }
-        .recommendation p strong { color: var(--ink); }
-        .days { display: inline-block; background: #fff0a0; color: #806a00; border-radius: 4px; padding: 2px 7px; font-weight: 800; white-space: nowrap; }
-        .actions { display: flex; gap: 12px; margin-top: 21px; }
-        .accept-btn { border-radius: 7px; padding: 11px 18px; }
-        .alternative-btn { border: 1px solid #d5dbe2; border-radius: 7px; padding: 10px 18px; color: #596576; background: #f6f7f8; font-weight: 700; }
-        .alternative-btn:hover { background: #e9edf0; }
-        .soil { min-height: 291px; padding: 23px; }
-        .soil .badge { background: #f1e4ff; color: #8f44df; }
-        .soil-content { display: grid; grid-template-columns: 1fr 1.04fr; align-items: center; gap: 30px; margin-top: 23px; }
-        .map { position: relative; overflow: hidden; min-height: 194px; border-radius: 10px; background: linear-gradient(135deg, #dac59a, #efd9a7 38%, #dbab8d 67%, #d3bb94); }
-        .map::before { content: ""; position: absolute; inset: 0; opacity: .35; background: repeating-linear-gradient(35deg, transparent 0 17px, #af956d 18px 20px, transparent 21px 34px); mix-blend-mode: multiply; }
-        .map::after { content: ""; position: absolute; width: 130px; height: 120px; left: 39%; top: 10%; border-radius: 48% 52% 62% 38%; background: #b29b79; opacity: .28; transform: rotate(-27deg); }
-        .scan-btn { position: absolute; z-index: 1; left: 50%; top: 50%; transform: translate(-50%, -50%); white-space: nowrap; border: 0; border-radius: 9px; padding: 8px 12px; background: white; color: #4b5563; font-size: 12px; font-weight: 800; box-shadow: 0 3px 9px #5b46322d; }
-        .metrics { display: grid; gap: 20px; }
-        .metric-head { display: flex; justify-content: space-between; color: #5c6677; font-size: 14px; margin-bottom: 6px; }
-        .metric-head strong { color: #ef3034; }
-        .metric:nth-child(2) .metric-head strong { color: #ff711c; }
-        .bar { height: 10px; border-radius: 8px; background: #e4e6e9; overflow: hidden; }
-        .bar span { display: block; height: 100%; border-radius: inherit; background: #ef3034; width: 18%; }
-        .metric:nth-child(2) .bar span { background: #ff711c; width: 32%; }
-        .stress { background: linear-gradient(90deg, #2ac45e 0 34%, #efbd00 34% 67%, #ec898f 67%); }
-        .toast { position: fixed; right: 22px; bottom: 22px; z-index: 5; display: none; max-width: 310px; padding: 14px 17px; color: #fff; background: #1c2939; border-radius: 9px; box-shadow: 0 10px 24px #17203345; font-size: 14px; }
-        .toast.show { display: block; animation: rise .2s ease-out; }
-        @keyframes rise { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .view { display: none; }
-        .view.active { display: block; animation: view-in .35s ease-out; }
-        @keyframes view-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        .theme-toggle { width: 35px; height: 35px; border: 1px solid #dbe0e5; border-radius: 50%; background: #fafbfc; color: #536071; }
-        .theme-toggle:hover { color: var(--green); border-color: var(--green); }
-        .landing { padding: 62px 0 44px; }
-        .landing-hero { display: grid; grid-template-columns: 1.02fr .98fr; align-items: center; gap: 56px; min-height: 440px; }
-        .landing-copy .eyebrow { margin-bottom: 19px; }
-        .landing-copy h1 { max-width: 650px; font-size: clamp(42px, 6vw, 72px); line-height: 1.02; letter-spacing: -2.4px; }
-        .landing-copy h1 span { color: var(--green); }
-        .landing-copy > p { max-width: 560px; color: var(--muted); font-size: 18px; line-height: 1.65; margin: 22px 0 28px; }
-        .landing-actions { display: flex; gap: 12px; align-items: center; }
-        .primary-cta { border: 0; border-radius: 8px; padding: 13px 20px; color: white; background: var(--green); font-weight: 800; box-shadow: 0 8px 16px #16a34a2c; }
-        .primary-cta:hover { background: var(--green-dark); }
-        .secondary-cta { border: 1px solid var(--line); border-radius: 8px; padding: 12px 18px; color: var(--ink); background: var(--surface); font-weight: 700; }
-        .secondary-cta:hover { border-color: var(--green); color: var(--green); }
-        .landing-visual { position: relative; min-height: 380px; padding: 24px; overflow: hidden; border: 1px solid #dfe8e0; border-radius: 24px; background: linear-gradient(140deg, #e5f3e8, #f7f4e7 56%, #e5eff8); box-shadow: var(--shadow); }
-        .landing-visual::before { content: ""; position: absolute; width: 230px; height: 230px; right: -65px; top: -75px; border-radius: 50%; background: #acd8b277; }
-        .field-lines { position: absolute; inset: 0; opacity: .4; background: repeating-linear-gradient(166deg, transparent 0 25px, #8fbf9c 26px 28px, transparent 29px 52px); transform: rotate(-8deg) scale(1.2); }
-        .signal-card { position: absolute; left: 24px; top: 24px; width: 205px; padding: 16px; border: 1px solid #ffffffaa; border-radius: 13px; background: #ffffffdf; box-shadow: 0 8px 22px #48614b22; }
-        .signal-card strong { display: block; margin: 7px 0 4px; font-family: Manrope; font-size: 24px; }
-        .signal-card span { color: var(--muted); font-size: 12px; }
-        .signal-icon { color: var(--green); font-size: 20px; }
-        .orbit { position: absolute; right: 54px; top: 76px; width: 164px; height: 164px; display: grid; place-items: center; border: 1px solid #ffffffb8; border-radius: 50%; background: #ffffff55; }
-        .orbit::before { content: ""; position: absolute; width: 115px; height: 115px; border: 1px dashed #6ca47a; border-radius: 50%; }
-        .orbit i { z-index: 1; color: #2d8a4d; font-size: 53px; }
-        .insight-card { position: absolute; right: 24px; bottom: 25px; width: 236px; padding: 16px; border-left: 4px solid var(--green); border-radius: 9px; background: var(--surface); box-shadow: 0 8px 20px #48614b22; }
-        .insight-card small { color: var(--green); font-weight: 800; letter-spacing: .7px; }
-        .insight-card p { margin-top: 7px; color: var(--ink); font-weight: 700; line-height: 1.4; }
-        .landing-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 32px; }
-        .stat { padding: 20px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
-        .stat strong { display: block; font-family: Manrope; font-size: 26px; }
-        .stat span { display: block; color: var(--muted); font-size: 13px; margin-top: 5px; }
-        body.dark { --ink: #edf5ef; --muted: #9ca9a1; --line: #35433b; --surface: #1d2822; --canvas: #111914; --shadow: 0 8px 20px rgba(0,0,0,.22); }
-        body.dark .topbar { background: rgba(29,40,34,.9); border-color: #35433b; }
-        body.dark .brand { color: #b8e6c4; }
-        body.dark nav a, body.dark .language, body.dark .theme-toggle, body.dark .location { color: #bdc9c0; }
-        body.dark .language, body.dark .theme-toggle, body.dark .location, body.dark .secondary-cta, body.dark .alternative-btn { background: #202d26; border-color: #405046; }
-        body.dark .location select { color: #d5e0d8; }
-        body.dark .alert { background: #3a2022; border-color: #623336; }
-        body.dark .alert h2 { color: #fff1f1; }
-        body.dark .badge { background: #253d5c; color: #9ec5ff; }
-        body.dark .soil .badge { background: #3a2850; color: #d4a9ff; }
-        body.dark .map { background: linear-gradient(135deg, #665c43, #88764f 38%, #704f4d 67%, #5c5144); }
-        body.dark .scan-btn { background: #edf5ef; color: #243329; }
-        body.dark .landing-visual { background: linear-gradient(140deg, #1c3925, #3b3825 56%, #1d3240); border-color: #3a5943; }
-        body.dark .signal-card, body.dark .insight-card { background: #1d2822ee; border-color: #405046; }
-        body.dark .insight-card p { color: var(--ink); }
-        @media (max-width: 850px) {
-            .topbar { height: auto; min-height: 64px; flex-wrap: wrap; gap: 12px; padding: 12px 18px; border-radius: 20px; }
-            nav { order: 3; width: 100%; justify-content: space-between; margin: 0; padding-top: 4px; }
-            .heading { align-items: flex-start; flex-direction: column; gap: 18px; }
-            .dashboard-grid { grid-template-columns: 1fr; }
-            .landing-hero { grid-template-columns: 1fr; gap: 28px; }
-            .landing { padding-top: 38px; }
-        }
-        @media (max-width: 560px) {
-            .shell { width: min(100% - 24px, 1204px); }
-            .top-actions { gap: 7px; }
-            .dashboard-btn { padding: 9px 12px; }
-            nav { gap: 10px; overflow-x: auto; }
-            nav a { font-size: 12px; white-space: nowrap; }
-            h1 { font-size: 26px; }
-            .soil-content { grid-template-columns: 1fr; gap: 20px; }
-            .map { min-height: 160px; }
-            .recommendation p { font-size: 15px; }
-            .landing-stats { grid-template-columns: 1fr; }
-            .landing-copy h1 { letter-spacing: -1.3px; }
-            .landing-visual { min-height: 330px; }
-            .orbit { right: 26px; top: 85px; }
-        }
-    </style>
-</head>
-<body>
-    <div class="shell">
-        <header class="topbar">
-            <a class="brand" href="#landing" aria-label="AgroShift Nexus home"><span class="brand-mark"><i class="fa-solid fa-leaf"></i></span> AgroShift Nexus</a>
-            <nav aria-label="Primary navigation"><a href="#landing">The Vision</a><a href="#soil">NASA AI</a><a href="#team">Team</a></nav>
-            <div class="top-actions"><button class="theme-toggle" type="button" id="themeToggle" aria-label="Switch to dark theme"><i class="fa-solid fa-moon"></i></button><button class="language" type="button" aria-label="Change language">EN / বাংলা</button><button class="dashboard-btn" type="button" id="openDashboard"><i class="fa-solid fa-chart-line"></i> Open Dashboard</button></div>
-        </header>
-        <main class="view active landing" id="landing">
-            <section class="landing-hero">
-                <div class="landing-copy">
-                    <div class="eyebrow"><i class="fa-solid fa-satellite"></i> NASA EARTH DATA FOR EVERY FIELD</div>
-                    <h1>Grow with a clearer view of <span>what comes next.</span></h1>
-                    <p>AgroShift Nexus turns satellite intelligence, local weather, and soil signals into calm, practical decisions for climate-resilient farming.</p>
-                    <div class="landing-actions"><button class="primary-cta" type="button" id="launchDashboard"><i class="fa-solid fa-chart-line"></i> Open Farmer Dashboard</button><a class="secondary-cta" href="#landing">See the vision</a></div>
-                </div>
-                <div class="landing-visual" aria-label="Illustration of satellite-powered farm intelligence">
-                    <div class="field-lines"></div>
-                    <div class="signal-card"><i class="signal-icon fa-solid fa-satellite-dish"></i><strong>Live field signals</strong><span>SMAP · GPM · MODIS</span></div>
-                    <div class="orbit"><i class="fa-solid fa-seedling"></i></div>
-                    <div class="insight-card"><small>ADAPTIVE INSIGHT</small><p>Plant cover crops within the next 12 days.</p></div>
-                </div>
-            </section>
-            <section class="landing-stats" aria-label="Platform capabilities">
-                <div class="stat"><strong>48 hr</strong><span>Early warning window for weather risk</span></div>
-                <div class="stat"><strong>1m</strong><span>Root-zone moisture visibility</span></div>
-                <div class="stat"><strong>6 AI agents</strong><span>Collaborating on every recommendation</span></div>
-            </section>
-        </main>
-        <main class="view dashboard-view" id="dashboardView">
-            <section class="heading" id="vision"><div><h1>Farmer's AI Assistant</h1><p>Turning predictive intelligence into proactive adaptation.</p></div><label class="location"><i class="fa-solid fa-location-dot"></i><select id="locationSelect" aria-label="Farm location"><option>Barind Tract, Rajshahi</option><option>Rangpur, Bangladesh</option><option>Khulna, Bangladesh</option></select><i class="fa-solid fa-chevron-down"></i></label></section>
-            <div class="dashboard-grid">
-                <div class="left-column">
-                    <section class="panel alert" aria-labelledby="alertTitle"><div class="eyebrow"><span class="dot"></span> CRITICAL ALERT</div><h2 id="alertTitle">Flash Flood Warning</h2><p>NASA GPM data predicts heavy unseasonal downpour in 48 hours.</p><button class="alert-action" id="alertAction" type="button">View Evacuation/Protection Steps</button></section>
-                    <section class="panel climate" aria-labelledby="climateTitle"><div class="panel-heading"><h3 id="climateTitle"><i class="fa-solid fa-sun"></i> Local Climate</h3><span class="badge">NASA MODIS</span></div><div class="temperature"><i class="fa-solid fa-temperature-three-quarters"></i><div><strong>38°C</strong><span>High Heat Index</span></div></div><div class="forecast"><div class="forecast-row"><span>Tomorrow</span><span><i class="fa-solid fa-sun"></i>39°C</span></div><div class="forecast-row"><span>Friday</span><span><i class="fa-solid fa-cloud-rain"></i>28°C</span></div><div class="forecast-row"><span>Saturday</span><span><i class="fa-solid fa-cloud-showers-heavy"></i>26°C</span></div></div></section>
-                </div>
-                <div class="right-column">
-                    <section class="panel recommendation" aria-labelledby="recommendationTitle"><div class="eyebrow"><i class="fa-solid fa-robot"></i> ADAPTIVE ROTATION AGENT</div><h2 id="recommendationTitle">Optimal Action Required</h2><p><strong>Recommendation:</strong> Plant legume cover crops (e.g., Mung bean) within the next <span class="days">12 days</span> to retain moisture ahead of projected dry spells and restore soil nitrogen.</p><div class="actions"><button class="accept-btn" type="button" id="acceptPlan"><i class="fa-solid fa-check"></i> Accept Plan</button><button class="alternative-btn" type="button" id="viewAlternatives">View Alternatives</button></div></section>
-                    <section class="panel soil" id="soil" aria-labelledby="soilTitle"><div class="panel-heading"><h3 id="soilTitle"><i class="fa-solid fa-layer-group" style="color:#263445"></i> Root-Zone Soil Moisture</h3><span class="badge">NASA SMAP Data</span></div><div class="soil-content"><div class="map" role="img" aria-label="Stylized live satellite scan of the farm region"><button class="scan-btn" type="button" id="scanButton">Live Satellite Scan</button></div><div class="metrics"><div class="metric"><div class="metric-head"><span>Topsoil Moisture</span><strong>18% (Critical)</strong></div><div class="bar"><span></span></div></div><div class="metric"><div class="metric-head"><span>Root-Zone Moisture (1m)</span><strong>32% (Low)</strong></div><div class="bar"><span></span></div></div><div class="metric"><div class="metric-head"><span>Evapotranspiration Stress</span><strong style="color:#273142">High</strong></div><div class="bar stress"></div></div></div></div></section>
-                </div>
-            </div>
-            <section id="team" style="height: 20px"></section>
-        </main>
-    </div>
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AgroShift Nexus — Climate-Resilient Crop Rotation</title>
+    <meta name="description" content="A multi-agent decision-support platform that pairs NASA Earthdata with farmer knowledge to recommend climate-resilient crop rotations." />
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        const toast = document.getElementById('toast');
-        const landing = document.getElementById('landing');
-        const dashboard = document.getElementById('dashboardView');
-        const dashboardButton = document.getElementById('openDashboard');
-        const themeToggle = document.getElementById('themeToggle');
-        let toastTimer;
-        function showToast(message) { toast.textContent = message; toast.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove('show'), 3200); }
-        function setView(view) {
-            const showingDashboard = view === 'dashboard';
-            landing.classList.toggle('active', !showingDashboard);
-            dashboard.classList.toggle('active', showingDashboard);
-            dashboardButton.innerHTML = showingDashboard ? '<i class="fa-solid fa-arrow-left"></i> Back to Overview' : '<i class="fa-solid fa-chart-line"></i> Open Dashboard';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        dashboardButton.addEventListener('click', () => setView(dashboard.classList.contains('active') ? 'landing' : 'dashboard'));
-        document.getElementById('launchDashboard').addEventListener('click', () => setView('dashboard'));
-        document.querySelector('a[href="#soil"]').addEventListener('click', (event) => { event.preventDefault(); setView('dashboard'); setTimeout(() => document.getElementById('soil').scrollIntoView({ behavior: 'smooth' }), 80); });
-        document.querySelector('a[href="#team"]').addEventListener('click', (event) => { event.preventDefault(); setView('dashboard'); });
-        const savedTheme = localStorage.getItem('agroshift-theme');
-        if (savedTheme === 'dark') document.body.classList.add('dark');
-        function updateThemeButton() { const dark = document.body.classList.contains('dark'); themeToggle.innerHTML = dark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>'; themeToggle.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme'); }
-        updateThemeButton();
-        themeToggle.addEventListener('click', () => { document.body.classList.toggle('dark'); localStorage.setItem('agroshift-theme', document.body.classList.contains('dark') ? 'dark' : 'light'); updateThemeButton(); });
-        document.getElementById('acceptPlan').addEventListener('click', (event) => { event.currentTarget.innerHTML = '<i class="fa-solid fa-check-double"></i> Plan Accepted'; showToast('Rotation plan saved for Barind Tract, Rajshahi.'); });
-        document.getElementById('viewAlternatives').addEventListener('click', () => showToast('Alternative: drought-tolerant maize with reduced irrigation demand.'));
-        document.getElementById('alertAction').addEventListener('click', () => showToast('Protection steps: move equipment to high ground and clear drainage channels.'));
-        document.getElementById('scanButton').addEventListener('click', (event) => { event.currentTarget.textContent = 'Scanning...'; setTimeout(() => { event.currentTarget.textContent = 'Scan Updated'; showToast('Satellite scan refreshed just now.'); }, 900); });
-        document.getElementById('locationSelect').addEventListener('change', (event) => showToast(`Showing climate data for ${event.target.value}.`));
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: "#E8F5E9",
+                100: "#DCFCE7",
+                200: "#BBF7D0",
+                300: "#86EFAC",
+                400: "#4ADE80",
+                500: "#22C55E",
+                600: "#16A34A",
+                700: "#15803D",
+                800: "#166534",
+                900: "#14532D",
+              },
+              ink: {
+                900: "#1E293B",
+                700: "#334155",
+                600: "#475569",
+                500: "#64748B",
+                400: "#94A3B8",
+                300: "#CBD5E1",
+                200: "#E2E8F0",
+                100: "#F1F5F9",
+                50:  "#F8FAFC",
+              },
+              alert: {
+                50:  "#FEF2F2",
+                100: "#FEE2E2",
+                500: "#EF4444",
+                600: "#DC2626",
+                700: "#B91C1C",
+              },
+              warn: {
+                50: "#FFFBEB",
+                500: "#F59E0B",
+                600: "#D97706",
+              },
+              soil: {
+                50:  "#FAF7F2",
+                100: "#EFEAE0",
+                200: "#D9CFB9",
+                400: "#A89368",
+                600: "#7C6843",
+                800: "#4A3D26",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "ui-sans-serif", "system-ui", "Segoe UI", "Roboto", "sans-serif"],
+              display: ["'Plus Jakarta Sans'", "Inter", "ui-sans-serif", "system-ui"],
+            },
+            boxShadow: {
+              card: "0 1px 2px rgba(15,23,42,0.04), 0 8px 24px -12px rgba(15,23,42,0.08)",
+              cardHover: "0 4px 12px rgba(22,163,74,0.10), 0 24px 48px -16px rgba(15,23,42,0.12)",
+              glow: "0 0 0 4px rgba(34,197,94,0.18)",
+            },
+            keyframes: {
+              floaty: { "0%,100%": { transform: "translateY(0)" }, "50%": { transform: "translateY(-6px)" } },
+              scan: { "0%": { transform: "translateX(-100%)" }, "100%": { transform: "translateX(100%)" } },
+              pulseDot: { "0%,100%": { opacity: 0.4, transform: "scale(0.9)" }, "50%": { opacity: 1, transform: "scale(1.1)" } },
+              ringPulse: { "0%": { transform: "scale(0.6)", opacity: 0.7 }, "100%": { transform: "scale(2.2)", opacity: 0 } },
+              fadeUp: { "0%": { opacity: 0, transform: "translateY(10px)" }, "100%": { opacity: 1, transform: "translateY(0)" } },
+              shimmer: { "0%": { backgroundPosition: "-200% 0" }, "100%": { backgroundPosition: "200% 0" } },
+              orbit: { "0%": { transform: "rotate(0deg)" }, "100%": { transform: "rotate(360deg)" } },
+            },
+            animation: {
+              floaty: "floaty 4s ease-in-out infinite",
+              scan: "scan 2.4s linear infinite",
+              pulseDot: "pulseDot 1.4s ease-in-out infinite",
+              ringPulse: "ringPulse 1.8s ease-out infinite",
+              fadeUp: "fadeUp 0.5s ease-out both",
+              shimmer: "shimmer 3s linear infinite",
+              orbit: "orbit 14s linear infinite",
+            },
+          },
+        },
+      };
     </script>
-</body>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="bg-ink-50 text-ink-700 antialiased">
+    <!-- Skip link -->
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:bg-brand-600 focus:text-white focus:px-3 focus:py-2 focus:rounded-lg">Skip to content</a>
+
+    <!-- App shell -->
+    <div id="app" class="min-h-screen flex flex-col"></div>
+
+    <!-- Fallback loader if JS is disabled -->
+    <noscript>
+      <div style="padding:2rem;font-family:system-ui;text-align:center;color:#1E293B;">
+        This prototype needs JavaScript enabled to run.
+      </div>
+    </noscript>
+
+    <!-- Plain (non-module) scripts so the app works from file:// and any static server -->
+    <script src="./data.js"></script>
+    <script src="./components.js"></script>
+    <script src="./pages/home.js"></script>
+    <script src="./pages/dashboard.js"></script>
+    <script src="./pages/agents.js"></script>
+    <script src="./pages/about.js"></script>
+    <script src="./app.js"></script>
+  </body>
 </html>

@@ -1,62 +1,84 @@
 # AgroShift Nexus
 
-AgroShift Nexus is a static concept site and interactive demo for a NASA Space Apps Challenge 2026 project. It presents a multi-agent decision-support workflow for climate-resilient crop rotation, combining satellite observations with soil, climate, crop, and economic considerations.
+AgroShift Nexus is a multi-agent decision-support prototype built for the
+NASA Space Apps Challenge 2026 by Team Nokkhotro. It is a static web app that
+demonstrates how a team of cooperating AI agents, fed by NASA Earth
+observations, can recommend climate-resilient crop rotations to farmers and
+agricultural advisors.
 
 ## Features
 
-- Responsive landing page built with semantic HTML.
-- Sections covering the challenge, agent architecture, NASA Earthdata, demo workflow, and team.
-- Interactive farmer dashboard simulation with progressive agent output.
-- User-editable farm location used in the simulated Earth observation output.
-- Tailwind CSS utilities loaded from the Tailwind CDN.
-- Font Awesome icons loaded from cdnjs.
-
-## Run locally
-
-No build step or package installation is required.
-
-1. Clone or download the repository.
-2. Open `index.html` in a modern browser.
-
-For a local HTTP server, use any static server, for example:
-
-```powershell
-python -m http.server 8000
-```
-
-Then visit `http://localhost:8000` from the project directory.
-
-The page needs an internet connection when opened because Tailwind CSS, Font Awesome, and the demonstration images are loaded from external CDNs.
+- **Multi-page prototype** with smooth client-side route transitions
+  (Home, Farmer Dashboard, Technology & Agents, About).
+- **Farmer dashboard** with location / soil / size / priority inputs, a
+  simulated multi-agent processing view, and a results panel that mirrors
+  the reference layout (critical alert, adaptive rotation recommendation,
+  local climate, root-zone soil moisture, 3-season rotation, metrics,
+  reasoning).
+- **Technology & Agents page** explaining the seven specialized agents and
+  the NASA datasets they consume (SMAP, GPM/IMERG, MODIS, VIIRS, Landsat,
+  SRTM, NASA POWER).
+- Tailwind CSS (CDN) + Font Awesome icons + a few custom CSS animations.
+- Fully responsive layout, no build step required.
 
 ## Project structure
 
 ```text
 AgroShift-Nexus/
-├── index.html   # Complete single-page site and demo logic
-├── README.md    # Project documentation
-└── LICENSE      # Project license
+├── index.html              Entry HTML + Tailwind config + global theme
+├── styles.css              Bespoke styles (grain, scanline, shimmer, topo, …)
+├── app.js                  Hash router + page bootstrapping
+├── components.js           Shared Navbar / Footer / Logo
+├── data.js                 Agents, NASA datasets, soil types, dummy analysis
+├── pages/
+│   ├── home.js             Landing page (hero, how-it-works, agents strip)
+│   ├── dashboard.js        Farmer Dashboard (inputs, processing, results)
+│   ├── agents.js           Technology & Agents page
+│   └── about.js            About page (project, team, disclaimer)
+├── README.md
+└── LICENSE
 ```
+
+## Run locally
+
+No build step or package installation is required.
+
+1. Open `index.html` directly in a modern browser, **or**
+2. Serve the folder with any static server, for example:
+
+   ```powershell
+   python -m http.server 8000
+   ```
+
+   Then visit `http://localhost:8000`.
+
+The page needs an internet connection when opened because Tailwind CSS,
+Font Awesome, and Google Fonts are loaded from external CDNs.
 
 ## Demo workflow
 
-Enter a farm location and select **Run Analysis**. The page simulates these collaborating agents:
+1. Open the **Farmer Dashboard** from the navbar (or visit
+   `http://localhost:8000/#dashboard`).
+2. Optionally edit Location, Soil Type, Farm Size, and Priorities.
+3. Click **Run Analysis**.
+4. Watch the seven agents light up, then see the recommended 3-season
+   rotation, root-zone soil moisture (SMAP), local climate (MODIS),
+   critical alerts, and an agent-by-agent reasoning trace.
 
-1. NASA Earth Observation Agent
-2. Soil & Farm Agent
-3. Climate Risk Agent
-4. Crop Intelligence Agent
-5. Economic Preference Agent
-6. Orchestrator Agent
-
-The output is illustrative only. The current repository does not connect to live NASA APIs, an AI model, a database, or an agricultural recommendation service.
+The numbers and recommendations shown are illustrative. The prototype does
+not connect to live NASA APIs, an AI model, a database, or any
+agricultural recommendation service.
 
 ## NASA data concepts
 
 The interface describes intended use of:
 
-- SMAP for soil-moisture observations.
-- GPM/IMERG for precipitation estimates.
-- MODIS/VIIRS NDVI for vegetation and crop-health monitoring.
+- **SMAP** — soil moisture.
+- **GPM / IMERG** — precipitation estimates.
+- **MODIS / VIIRS** — NDVI, EVI, land surface temperature.
+- **Landsat 8/9** — field boundaries and crop mapping.
+- **SRTM** — elevation, slope, aspect.
+- **NASA POWER** — climate climatology.
 
 These are represented in the demo UI and are not fetched at runtime.
 
@@ -64,7 +86,7 @@ These are represented in the demo UI and are not fetched at runtime.
 
 AgroShift Nexus is presented by Team Nokkhotro:
 
-- S. H. M. Irfan, Team Leader
+- S. H. M. Irfan — Team Leader
 - Arafat Mostofa Alif
 - Nasor Hidar
 - Suhita Srutee
@@ -73,4 +95,4 @@ AgroShift Nexus is presented by Team Nokkhotro:
 
 ## License
 
-See [LICENSE](LICENSE) for license details.
+See `LICENSE` for license details.
