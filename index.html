@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroShift Nexus | Team Nokkhotro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0f172a',
+                            light: '#1e293b',
+                            accent: '#10b981', // Emerald green
+                            blue: '#3b82f6',
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .hero-bg {
+            background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.95)), url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
+        }
+        .agent-card:hover .agent-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+        .agent-icon {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-brand-dark text-slate-300 font-sans antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-brand-dark/90 backdrop-blur-md border-b border-slate-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-earth-americas text-brand-accent text-2xl"></i>
+                    <span class="font-bold text-xl text-white tracking-wide">AgroShift <span class="text-brand-accent">Nexus</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#about" class="hover:text-brand-accent px-3 py-2 rounded-md text-sm font-medium transition-colors">About</a>
+                        <a href="#agents" class="hover:text-brand-accent px-3 py-2 rounded-md text-sm font-medium transition-colors">AI Agents</a>
+                        <a href="#data" class="hover:text-brand-accent px-3 py-2 rounded-md text-sm font-medium transition-colors">NASA Data</a>
+                        <a href="#team" class="hover:text-brand-accent px-3 py-2 rounded-md text-sm font-medium transition-colors">Team</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden min-h-screen flex items-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-4xl mx-auto">
+                <div class="inline-block mb-4 px-4 py-1 rounded-full bg-slate-800/80 border border-brand-accent/30 text-brand-accent text-sm font-semibold tracking-wider">
+                    NASA Space Apps Challenge 2026
+                </div>
+                <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
+                    Smarter Crop Rotations for a <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-brand-blue">Changing Climate</span>
+                </h1>
+                <p class="text-lg md:text-xl text-slate-300 mb-10 leading-relaxed">
+                    A web-based, multi-agent decision-support platform connecting NASA Earth observation data with farm-level realities. Empowering farmers to protect soil health, conserve water, and improve economic returns.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button onclick="document.getElementById('demo').scrollIntoView()" class="bg-brand-accent hover:bg-emerald-500 text-white font-bold py-3 px-8 rounded-lg transition-colors shadow-lg shadow-brand-accent/20 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-desktop"></i> Launch Platform Demo
+                    </button>
+                    <a href="#about" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 px-8 rounded-lg transition-colors border border-slate-600 flex items-center justify-center gap-2">
+                        Learn More <i class="fa-solid fa-arrow-down"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category & Problem Statement -->
+    <section id="about" class="py-20 bg-brand-light">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-brand-accent font-semibold tracking-wide uppercase text-sm mb-2">The Challenge</h2>
+                <h3 class="text-3xl md:text-4xl font-bold text-white mb-4">Field Shift: Adapting Farms with NASA Data</h3>
+                <div class="w-24 h-1 bg-brand-accent mx-auto rounded-full mb-8"></div>
+                <p class="max-w-3xl mx-auto text-lg text-slate-300">
+                    Climate change makes traditional farming unpredictable. By combining NASA data with collaborative multi-agent reasoning, AgroShift Nexus transforms complex Earth observation and agricultural information into practical farm-level guidance, helping farmers reduce crop loss and strengthen climate-resilient agriculture.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Multi-Agent System Section -->
+    <section id="agents" class="py-20 bg-brand-dark relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Collaborative Multi-Agent Architecture</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Our platform deploys a team of specialized AI agents to analyze farm conditions and recommend optimal crop sequences.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Agent 1 -->
+                <div class="agent-card bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-brand-blue/50 transition-colors shadow-lg">
+                    <div class="w-14 h-14 rounded-full bg-blue-500/20 flex items-center justify-center mb-6 agent-icon">
+                        <i class="fa-solid fa-satellite text-2xl text-brand-blue"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">NASA Earth Observation Agent</h4>
+                    <p class="text-sm text-slate-400 leading-relaxed">Analyzes satellite-derived environmental conditions, processing large-scale geospatial data to understand regional climate contexts.</p>
+                </div>
+
+                <!-- Agent 2 -->
+                <div class="agent-card bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-amber-500/50 transition-colors shadow-lg">
+                    <div class="w-14 h-14 rounded-full bg-amber-500/20 flex items-center justify-center mb-6 agent-icon">
+                        <i class="fa-solid fa-seedling text-2xl text-amber-500"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Soil & Farm Agent</h4>
+                    <p class="text-sm text-slate-400 leading-relaxed">Assesses local soil characteristics, moisture levels, and farm topography to determine fundamental land capabilities.</p>
+                </div>
+
+                <!-- Agent 3 -->
+                <div class="agent-card bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-red-500/50 transition-colors shadow-lg">
+                    <div class="w-14 h-14 rounded-full bg-red-500/20 flex items-center justify-center mb-6 agent-icon">
+                        <i class="fa-solid fa-cloud-bolt text-2xl text-red-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Climate Risk Agent</h4>
+                    <p class="text-sm text-slate-400 leading-relaxed">Identifies volatile climate patterns, predicting potential risks like unseasonal droughts or flash floods based on historical trends.</p>
+                </div>
+
+                <!-- Agent 4 -->
+                <div class="agent-card bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-brand-accent/50 transition-colors shadow-lg">
+                    <div class="w-14 h-14 rounded-full bg-brand-accent/20 flex items-center justify-center mb-6 agent-icon">
+                        <i class="fa-solid fa-leaf text-2xl text-brand-accent"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Crop Intelligence Agent</h4>
+                    <p class="text-sm text-slate-400 leading-relaxed">Evaluates crop suitability and rotation compatibility, ensuring successive crops restore nutrients rather than deplete them.</p>
+                </div>
+
+                <!-- Agent 5 -->
+                <div class="agent-card bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-purple-500/50 transition-colors shadow-lg">
+                    <div class="w-14 h-14 rounded-full bg-purple-500/20 flex items-center justify-center mb-6 agent-icon">
+                        <i class="fa-solid fa-coins text-2xl text-purple-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Economic Preference Agent</h4>
+                    <p class="text-sm text-slate-400 leading-relaxed">Considers market profitability, seed costs, and specific farmer priorities to ensure strategies are financially viable.</p>
+                </div>
+
+                <!-- Agent 6 -->
+                <div class="agent-card bg-gradient-to-br from-slate-800 to-slate-700 p-8 rounded-2xl border border-slate-600 shadow-lg relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-brand-accent/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="w-14 h-14 rounded-full bg-white/10 flex items-center justify-center mb-6 agent-icon relative z-10">
+                        <i class="fa-solid fa-network-wired text-2xl text-white"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3 relative z-10">Orchestrator Agent</h4>
+                    <p class="text-sm text-slate-300 leading-relaxed relative z-10">Coordinates all other agents, combines findings, resolves conflicts, and generates the final, actionable crop-rotation strategy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NASA Data Integration -->
+    <section id="data" class="py-20 bg-brand-light border-y border-slate-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2">
+                    <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="NASA Satellite Data View" class="rounded-2xl shadow-2xl border border-slate-600">
+                </div>
+                <div class="md:w-1/2">
+                    <h2 class="text-3xl font-bold text-white mb-6">Powered by NASA Earthdata</h2>
+                    <p class="text-slate-300 mb-8 leading-relaxed">AgroShift Nexus relies on cutting-edge space technology to provide grassroots solutions. We integrate critical satellite observations to inform our multi-agent model:</p>
+                    
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-4 bg-slate-800 p-4 rounded-lg border border-slate-700">
+                            <i class="fa-solid fa-water text-brand-blue mt-1 text-xl"></i>
+                            <div>
+                                <strong class="text-white block">SMAP (Soil Moisture Active Passive)</strong>
+                                <span class="text-sm text-slate-400">Tracks root-zone soil moisture levels to guide irrigation and drought preparedness.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 bg-slate-800 p-4 rounded-lg border border-slate-700">
+                            <i class="fa-solid fa-cloud-showers-heavy text-brand-accent mt-1 text-xl"></i>
+                            <div>
+                                <strong class="text-white block">GPM/IMERG</strong>
+                                <span class="text-sm text-slate-400">Provides high-resolution precipitation mapping to forecast rainfall and flood risks.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 bg-slate-800 p-4 rounded-lg border border-slate-700">
+                            <i class="fa-solid fa-satellite-dish text-amber-500 mt-1 text-xl"></i>
+                            <div>
+                                <strong class="text-white block">MODIS/VIIRS NDVI</strong>
+                                <span class="text-sm text-slate-400">Monitors Normalized Difference Vegetation Index to track ongoing crop health and land degradation.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Demo Section -->
+    <section id="demo" class="py-20 bg-brand-dark">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-white mb-4">Platform Interface Demo</h2>
+                <p class="text-slate-400">See how the agents collaborate in real-time to generate a strategy.</p>
+            </div>
+            
+            <div class="bg-slate-800 rounded-xl border border-slate-600 shadow-2xl overflow-hidden">
+                <!-- App Header -->
+                <div class="bg-slate-900 p-4 border-b border-slate-700 flex justify-between items-center">
+                    <div class="text-white font-semibold flex items-center gap-2">
+                        <i class="fa-solid fa-mobile-screen text-brand-accent"></i> Farmer Dashboard
+                    </div>
+                    <div class="flex gap-2">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    </div>
+                </div>
+                
+                <!-- App Body -->
+                <div class="p-6">
+                    <div class="flex flex-col sm:flex-row gap-4 mb-6">
+                        <label for="locationInput" class="sr-only">Farm location</label>
+                        <input type="text" id="locationInput" value="Rangpur, Bangladesh" class="flex-1 bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-accent" autocomplete="address-level2">
+                        <button id="analyzeBtn" type="button" class="bg-brand-accent hover:bg-emerald-500 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                            Run Analysis
+                        </button>
+                    </div>
+
+                    <!-- Terminal / Agent Output -->
+                    <div class="bg-black/50 rounded-lg p-4 h-64 overflow-y-auto font-mono text-sm border border-slate-700 relative">
+                        <div id="outputLog" class="space-y-2">
+                            <p class="text-slate-500">System ready. Waiting for input location...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="py-20 bg-brand-light">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-white mb-4">Team Nokkhotro</h2>
+                <div class="w-24 h-1 bg-brand-accent mx-auto rounded-full"></div>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 text-center">
+                <!-- Members based on form data -->
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                    <div class="w-16 h-16 bg-brand-blue/20 text-brand-blue rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">SI</div>
+                    <h4 class="text-white font-medium text-sm">S. H. M. Irfan</h4>
+                    <p class="text-brand-accent text-xs mt-1">Team Leader</p>
+                </div>
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                    <div class="w-16 h-16 bg-slate-700 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">AA</div>
+                    <h4 class="text-white font-medium text-sm">Arafat Mostofa Alif</h4>
+                    <p class="text-slate-400 text-xs mt-1">Member</p>
+                </div>
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 border-b-4 border-b-brand-accent">
+                    <div class="w-16 h-16 bg-brand-accent/20 text-brand-accent rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">NH</div>
+                    <h4 class="text-white font-medium text-sm">Nasor Hidar</h4>
+                    <p class="text-slate-400 text-xs mt-1">Member</p>
+                </div>
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                    <div class="w-16 h-16 bg-slate-700 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">SS</div>
+                    <h4 class="text-white font-medium text-sm">Suhita Srutee</h4>
+                    <p class="text-slate-400 text-xs mt-1">Member</p>
+                </div>
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                    <div class="w-16 h-16 bg-slate-700 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">MI</div>
+                    <h4 class="text-white font-medium text-sm">Md Monjurul Islam</h4>
+                    <p class="text-slate-400 text-xs mt-1">Member</p>
+                </div>
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                    <div class="w-16 h-16 bg-slate-700 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">SA</div>
+                    <h4 class="text-white font-medium text-sm">Saad Ahmed</h4>
+                    <p class="text-slate-400 text-xs mt-1">Member</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 py-8 border-t border-slate-800 text-center">
+        <p class="text-slate-500 text-sm">
+            Created for NASA Space Apps Challenge 2026. Data and branding belong to their respective owners.
+        </p>
+    </footer>
+
+    <!-- Demo Script -->
+    <script>
+        const btn = document.getElementById('analyzeBtn');
+        const log = document.getElementById('outputLog');
+        const locationInput = document.getElementById('locationInput');
+
+        const simulationSteps = [
+            "<span class='text-blue-400'>[Earth Obs Agent]</span> Querying SMAP & GPM data for Rangpur...",
+            "<span class='text-blue-400'>[Earth Obs Agent]</span> Detected decreasing soil moisture trend (-12%) over 30 days.",
+            "<span class='text-amber-400'>[Soil & Farm Agent]</span> Local soil: Loamy clay. Current retention: Moderate.",
+            "<span class='text-red-400'>[Climate Risk Agent]</span> Warning: High probability of late-season dry spell.",
+            "<span class='text-emerald-400'>[Crop Intel Agent]</span> Evaluating: Paddy (High Risk), Maize (Low Risk), Legumes (Optimal).",
+            "<span class='text-purple-400'>[Economic Agent]</span> Legumes offer 18% higher profit margin with reduced irrigation costs.",
+            "<span class='text-white font-bold'>[Orchestrator]</span> Conflict resolved. Generating final recommendation...",
+            "<br><span class='text-brand-accent font-bold bg-brand-accent/20 px-2 py-1 rounded'>★ Final Strategy: Transition from Paddy to Legumes (Mung Bean) next cycle to restore soil nitrogen and evade drought window.</span>"
+        ];
+
+        btn.addEventListener('click', async () => {
+            const location = locationInput.value.trim() || 'your farm';
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            log.innerHTML = "<p class='text-white'>Initializing multi-agent analysis...</p>";
+            
+            for(let i = 0; i < simulationSteps.length; i++) {
+                await new Promise(r => setTimeout(r, 800));
+                log.innerHTML += `<p class="mt-1">${simulationSteps[i].replaceAll('Rangpur, Bangladesh', location)}</p>`;
+                log.scrollTop = log.scrollHeight;
+            }
+
+            btn.disabled = false;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            btn.innerText = "Run New Analysis";
+        });
+    </script>
+</body>
+</html>
